@@ -6,33 +6,35 @@
 
 int main(int argc, string argv[])
 {
-    if (argc != 2 || isalpha(argv[1][0]))
-    {
-        printf("Usage: ./vigenere keyword\n");
-        return 1;
-    }
-
-    string plaintext = get_string("plaintext: ");
-    char cipherText;
+    string plainText = get_string("plaintext: ");
+    //char cipherText;
     printf("ciphertext: ");
 
-    int key = argv[1][0];
-    printf("%i\n", key);
+    string key = argv[1];
 
-    char c = '\0'; // the character with value zero
-
-    if (islower(c))
+    for (int i = 0; i < strlen(key); i++)
     {
-        c -= 97;
-    }
+        printf("%i", isalpha(key[0]));
 
-    else if (isupper(c))
+        if (argc != 2 || isalpha(key[0]) == 0)
+        {
+            printf("Usage: ./vigenere key\n");
+            return 1;
+        }
+
+    }
+    
+    
+
+    for (int j = 0, n = strlen(plainText); j < n; i++)
     {
-        c -= 65;
+        if(isupper(plainText[j]))
+        {
+            printf(((plainText[j] - 65) + key % 26) + 65);
+            i++;
+        }
+
     }
-
-    return c;
-
-
     printf("\n");
+
 }
