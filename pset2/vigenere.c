@@ -6,34 +6,59 @@
 
 int main(int argc, string argv[])
 {
+    if (argc != 2)
+    {
+        printf("Usage: ./vigenere keyword\n");
+        return 1;
+    }
+
+    else
+    {
+        for (int i = 1; i < argc; i++)
+        {
+            for (int j = 0; argv[i][j] != '\0'; j++)
+            {
+                if (isalpha(argv[i][j]) == false)
+                    {
+                        printf("Usage: ./vigenere keyword\n");
+                        return 1;
+                    }
+            }
+        }
+    }
+
     string plainText = get_string("plaintext: ");
-    //char cipherText;
+
     printf("ciphertext: ");
 
     string key = argv[1];
 
-    for (int i = 0; i < strlen(key); i++)
+    int klength = strlen(key);
+
+    int ptlength = strlen(plainText);
+
+    for (int j = 0, counter = 0; j < ptlength; j++)
     {
-        printf("%i", isalpha(key[0]));
+        int keyvalue = tolower(key[counter % klength]) - 'a';
 
-        if (argc != 2 || isalpha(key[0]) == 0)
+        if (isalpha(plainText[j]))
         {
-            printf("Usage: ./vigenere key\n");
-            return 1;
+            if (isupper(plainText[j]))
+            {
+                printf("%c", (((plainText[j] - 'A') + keyvalue) % 26) + 'A');
+                counter++;
+            }
+
+            else
+            {
+                printf("%c", (((plainText[j] - 'a') + keyvalue) % 26) + 'a');
+                counter++;
+            }
         }
-
-    }
-    
-    
-
-    for (int j = 0, n = strlen(plainText); j < n; i++)
-    {
-        if(isupper(plainText[j]))
+        else
         {
-            printf(((plainText[j] - 65) + key % 26) + 65);
-            i++;
+            printf("%c", plainText[j]);
         }
-
     }
     printf("\n");
 
