@@ -67,23 +67,20 @@ bool load(const char *dictionary)
             return false;
         }
 
-        strcpy(new_node->word, word); //copy word into node
-
-        int hashvalue = hash(word); // gets the value from the hash function
-
         //if this word in the hashtable is not assigned a node
-        if (hashtable[hashvalue] == NULL)
-        {
-            hashtable[hashvalue] = new_node; // add to "new_node"
+        if (hashtable[value] == NULL)
+        {   
+            strcpy(new_node->word, word); //copy word into node
+            int value = hash(word); // gets the value from the hash function
+            hashtable[value] = new_node; // add to "new_node"
         }
 
-        else // add "new_node" to the list of values stored in the array
+        else // add new new node to the list of values stored in the array
         {
-            // both pointer pointing to the previous "first" node in the list
-            new_node->next = hashtable[hashvalue];
-
-            // hashtable value insert to the front of the node that was previously first
-            hashtable[hashvalue] = new_node;
+            node *nextnode = malloc(sizeof(node));
+            nextNode->next = NULL;
+            strcpy(nextNode->word, word);
+            new_node->next = nextNode;
         }
 
         wordCount++;
