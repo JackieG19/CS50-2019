@@ -3,6 +3,9 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
 
 #include "dictionary.h"
 
@@ -25,6 +28,9 @@ unsigned int hash(const char *word)
 {
     return tolower(word[0]) - 'a';
 }
+
+// Tracks the numbers of words loaded in the hashtable
+int wordCount = 0;
 
 // Loads dictionary into memory, returning true if successful else false
 bool load(const char *dictionary)
@@ -50,6 +56,38 @@ bool load(const char *dictionary)
     while (fscanf(file, "%s", word) != EOF)
     {
         // TODO
+        node *new_node = NULL;
+        int value = hash(word);
+
+        //if this word in the hashtable is not assigned a node
+        if (hashtable[value] == NULL)
+        {
+            new_node = malloc(sizeof(node));
+            new_node->next = NULL;
+            strcpy(new_node->word, word); //copy word into node
+            hashtable[value] = new_node; // add to "new_node"
+            //printf("%s", hashtable[value]->word); //cat
+        }
+         else // add new new node to the list of values stored in the array
+        {
+            node *nextnode = malloc(sizeof(node));
+            nextnode->next = NULL;
+            strcpy(nextnode->word, word);
+            
+            node *travnext = hashtable[value];
+            while(travnext->next != NULL)
+            {
+                travnext = travnext->next;
+            }
+            travnext->next = nextnode;
+            
+            //new_node->next = nextnode;
+            //hashtable[value]->next = nextnode;
+            
+            printf("%s", travnext->next->word); // caterpillar
+            //printf("%s", travnext->next->next->word); // null
+        }
+        wordCount++;
     }
 
     // Close dictionary
@@ -63,13 +101,31 @@ bool load(const char *dictionary)
 unsigned int size(void)
 {
     // TODO
-    return 0;
+    return wordCount; // false;
 }
 
 // Returns true if word is in dictionary else false
 bool check(const char *word)
 {
     // TODO
+
+    int key = hash(word);
+
+    node *head = hashtable[key];
+
+    node *temp = head;
+
+    while (temp != NULL)
+    {
+        if (strcasecmp(word, temp->word) == 0)
+        {
+            return true;
+        }
+        else
+        {
+            temp = temp->next;
+        }
+    }
     return false;
 }
 
@@ -77,5 +133,16 @@ bool check(const char *word)
 bool unload(void)
 {
     // TODO
-    return false;
+   for (int i = 0, n = 26; i < n; i++)
+    {
+        node *temp = hashtable[i];
+
+        while (temp != NULL)
+        {
+            temp = temp->next;
+            free(temp);
+        }
+    }
+    return true;
+    //return false;
 }
